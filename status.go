@@ -77,25 +77,44 @@ type Status struct {
 	conflicts int
 	changed   int
 	untracked int
+	stashs    int
 }
 
 func newStatus() Status {
-	return Status{"", 0, 0, 0, 0, 0, 0}
+	return Status{"", 0, 0, 0, 0, 0, 0, 0}
 }
 
 func (s Status) String() string {
-	return fmt.Sprintf("%s %d %d %d %d %d %d", s.branch, s.ahead, s.behind, s.staged, s.conflicts, s.changed, s.untracked)
+	return fmt.Sprintf("%s %d %d %d %d %d %d %d", s.branch, s.ahead, s.behind, s.staged, s.conflicts, s.changed, s.untracked, s.stashs)
 }
 
 // GetCurrentStatus ...
 func GetCurrentStatus() (Status, error) {
-	stdout, stderr, err := Communicate("git", "status", "--porcelain", "--branch")
-	if err != nil {
-		return newStatus(), err
-	} else if strings.Contains(stderr, "fatal") {
-		return newStatus(), errors.New("")
+	var lines []string
+	{
+		stdout, stderr, err := Communicate("git", "status", "--porcelain", "--branch")
+		if err != nil {
+			return newStatus(), err
+		} else if strings.Contains(stderr, "fatal") {
+			return newStatus(), errors.New("")
+		}
+		if len(stdout) > 0 {
+			lines = strings.Split(stdout[0:len(stdout)-1], "\n")
+		}
 	}
-	lines := strings.Split(stdout, "\n")
+
+	var stashs []string
+	{
+		stdout, stderr, err := Communicate("git", "stash", "list")
+		if err != nil {
+			return newStatus(), err
+		} else if strings.Contains(stderr, "fatal") {
+			return newStatus(), errors.New("")
+		}
+		if len(stdout) > 0 {
+			stashs = strings.Split(stdout[0:len(stdout)-1], "\n")
+		}
+	}
 
 	branch, ahead, behind, err := parseBranch(lines[0])
 	if err != nil {
@@ -103,5 +122,5 @@ func GetCurrentStatus() (Status, error) {
 	}
 	staged, conflicts, changed, untracked := countChanges(lines[1:len(lines)])
 
-	return Status{branch, ahead, behind, staged, conflicts, changed, untracked}, nil
+	return Status{branch, ahead, behind, staged, conflicts, changed, untracked, len(stashs)}, nil
 }
