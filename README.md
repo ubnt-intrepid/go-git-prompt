@@ -7,7 +7,7 @@ This project is inspired from oliviervedier's [zsh-git-prompt](https://github.co
 
 for Zsh user:
 ```zsh
-PROMPT='%~ $(git-prompt-go) >"
+PROMPT='%~ $(git-prompt-go) >'
 ```
 
 for PowerShell user:
@@ -18,12 +18,6 @@ function prompt {
   return "`n> "
 }
 ```
-
-## TODO
-- [ ] ステータスの取得の一部を libgit2 で置き換えて高速化する
-  * 特に `git stash` が Git for Windows だと遅い（シェルスクリプトで実装されているため）
-
-- [ ] （本来の目的である） Rust 版への移植
 
 ## License
 This software is released under the MIT license.

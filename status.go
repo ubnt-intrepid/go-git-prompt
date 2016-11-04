@@ -1,7 +1,11 @@
 package main
 
-import "fmt"
-import "github.com/fatih/color"
+import (
+	"fmt"
+	"strings"
+
+	"github.com/fatih/color"
+)
 
 // Status ...
 type Status struct {
@@ -63,6 +67,23 @@ func (s Status) Format() string {
 	return ret
 }
 
+func getStashCount() (int, error) {
+	// check if the repository has stash(es).
+	_, _, err := Communicate("git", "rev-parse", "--vefify", "--quiet", "refs/stash")
+	if err != nil {
+		return 0, nil
+	}
+
+	stdout, stderr, err := Communicate("git", "log", "--format=\"%%gd: %%gs\"", "-g", "--first-parent", "-m", "refs/stash", "--")
+	if err != nil {
+		return 0, err
+	} else if strings.Contains(stderr, "fatal") {
+		return 0, fmt.Errorf("failed to get the list of stashes: " + stderr)
+	}
+
+	return len(strings.Split(stdout, "\n")) - 1, nil
+}
+
 // GetCurrentStatus ...
 func GetCurrentStatus() (Status, error) {
 	lines, err := GetLines("git", "status", "--porcelain", "--branch")
@@ -70,7 +91,7 @@ func GetCurrentStatus() (Status, error) {
 		return newStatus(), err
 	}
 
-	stashes, err := GetLines("git", "stash", "list")
+	numStashes, err := getStashCount()
 	if err != nil {
 		return newStatus(), err
 	}
@@ -81,5 +102,5 @@ func GetCurrentStatus() (Status, error) {
 	}
 	staged, conflicts, changed, untracked := CollectChanges(lines[1:len(lines)])
 
-	return Status{branch, detached, hasremote, ahead, behind, staged, conflicts, changed, untracked, len(stashes)}, nil
+	return Status{branch, detached, hasremote, ahead, behind, staged, conflicts, changed, untracked, numStashes}, nil
 }
