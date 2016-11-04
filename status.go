@@ -1,6 +1,7 @@
 package main
 
 import "fmt"
+import "github.com/fatih/color"
 
 // Status ...
 type Status struct {
@@ -30,41 +31,31 @@ func (s Status) Format() string {
 
 	// branch
 	if s.detached {
-		ret += "(" + s.branch + ")"
+		ret += color.CyanString("(" + s.branch + ")")
 	} else {
-		ret += s.branch
+		ret += color.CyanString(s.branch)
 	}
-
 	if s.hasremote {
 		if s.ahead > 0 && s.behind > 0 {
-			ret += fmt.Sprintf(" ↑%d ↓%d", s.ahead, s.behind)
+			ret += color.YellowString(" ↑%d ↓%d", s.ahead, s.behind)
 		} else if s.ahead > 0 {
-			ret += fmt.Sprintf(" ↑%d", s.ahead)
+			ret += color.GreenString(" ↑%d", s.ahead)
 		} else if s.behind > 0 {
-			ret += fmt.Sprintf(" ↓%d", s.behind)
+			ret += color.RedString(" ↓%d", s.behind)
 		} else {
-			ret += fmt.Sprintf(" ≡")
+			ret += color.CyanString(" ≡")
 		}
 	}
 
 	if s.staged > 0 || s.changed > 0 || s.conflicts > 0 || s.untracked > 0 {
-		ret += " |"
-		if s.staged > 0 {
-			ret += fmt.Sprintf(" +%d", s.staged)
-		}
-		if s.changed > 0 {
-			ret += fmt.Sprintf(" ~%d", s.changed)
-		}
-		if s.conflicts > 0 {
-			ret += fmt.Sprintf(" !%d", s.conflicts)
-		}
-		if s.untracked > 0 {
-			ret += fmt.Sprintf(" ?%d", s.untracked)
-		}
+		ret += color.RedString(" +%d", s.staged)
+		ret += color.RedString(" ~%d", s.changed)
+		ret += color.RedString(" ?%d", s.untracked)
+		ret += color.RedString(" !%d", s.conflicts)
 	}
 
 	if s.stashs > 0 {
-		ret += fmt.Sprintf(" | (%d)", s.stashs)
+		ret += color.GreenString(" | s%d", s.stashs)
 	}
 
 	ret += "]"
@@ -79,7 +70,7 @@ func GetCurrentStatus() (Status, error) {
 		return newStatus(), err
 	}
 
-	stashs, err := GetLines("git", "stash", "list")
+	stashes, err := GetLines("git", "stash", "list")
 	if err != nil {
 		return newStatus(), err
 	}
@@ -90,5 +81,5 @@ func GetCurrentStatus() (Status, error) {
 	}
 	staged, conflicts, changed, untracked := CollectChanges(lines[1:len(lines)])
 
-	return Status{branch, detached, hasremote, ahead, behind, staged, conflicts, changed, untracked, len(stashs)}, nil
+	return Status{branch, detached, hasremote, ahead, behind, staged, conflicts, changed, untracked, len(stashes)}, nil
 }
