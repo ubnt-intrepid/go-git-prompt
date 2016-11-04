@@ -5,7 +5,7 @@ import "fmt"
 func main() {
 	status, err := GetCurrentStatus()
 	if err != nil {
-		panic(err)
+		return
 	}
 	fmt.Print(status.Format())
 }
