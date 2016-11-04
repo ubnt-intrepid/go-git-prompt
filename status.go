@@ -24,6 +24,54 @@ func (s Status) String() string {
 	return fmt.Sprintf("%s %v %v %d %d %d %d %d %d %d", s.branch, s.detached, s.hasremote, s.ahead, s.behind, s.staged, s.conflicts, s.changed, s.untracked, s.stashs)
 }
 
+// Format ...
+func (s Status) Format() string {
+	ret := "["
+
+	// branch
+	if s.detached {
+		ret += "(" + s.branch + ")"
+	} else {
+		ret += s.branch
+	}
+
+	if s.hasremote {
+		if s.ahead > 0 && s.behind > 0 {
+			ret += fmt.Sprintf(" ↑%d ↓%d", s.ahead, s.behind)
+		} else if s.ahead > 0 {
+			ret += fmt.Sprintf(" ↑%d", s.ahead)
+		} else if s.behind > 0 {
+			ret += fmt.Sprintf(" ↓%d", s.behind)
+		} else {
+			ret += fmt.Sprintf(" ≡")
+		}
+	}
+
+	if s.staged > 0 || s.changed > 0 || s.conflicts > 0 || s.untracked > 0 {
+		ret += " |"
+		if s.staged > 0 {
+			ret += fmt.Sprintf(" +%d", s.staged)
+		}
+		if s.changed > 0 {
+			ret += fmt.Sprintf(" ~%d", s.changed)
+		}
+		if s.conflicts > 0 {
+			ret += fmt.Sprintf(" !%d", s.conflicts)
+		}
+		if s.untracked > 0 {
+			ret += fmt.Sprintf(" ?%d", s.untracked)
+		}
+	}
+
+	if s.stashs > 0 {
+		ret += fmt.Sprintf(" | (%d)", s.stashs)
+	}
+
+	ret += "]"
+
+	return ret
+}
+
 // GetCurrentStatus ...
 func GetCurrentStatus() (Status, error) {
 	lines, err := GetLines("git", "status", "--porcelain", "--branch")

@@ -9,11 +9,11 @@ import (
 func getTagOrHash() string {
 	tag, _, _ := Communicate("git", "describe", "--exact-match")
 	if tag != "" {
-		return tag[0 : len(tag)-1]
+		return strings.TrimSpace(tag[0 : len(tag)-1])
 	}
 
 	hash, _, _ := Communicate("git", "rev-parse", "--short", "HEAD")
-	return ":" + strings.TrimSpace(hash[0:len(hash)-1])
+	return strings.TrimSpace(hash[0 : len(hash)-1])
 }
 
 // ParseBranchLine ...
