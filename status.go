@@ -31,7 +31,7 @@ func (s Status) String() string {
 
 // Format ...
 func (s Status) Format() string {
-	ret := ansi.Color("[", "yellow")
+	ret := ansi.Color("(", "yellow")
 
 	// branch
 	if s.detached {
@@ -62,7 +62,7 @@ func (s Status) Format() string {
 		ret += ansi.Color(fmt.Sprintf(" | s%d", s.stashs), "green")
 	}
 
-	ret += ansi.Color("]", "yellow")
+	ret += ansi.Color(")", "yellow")
 
 	return ret
 }
