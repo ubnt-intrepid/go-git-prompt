@@ -7,5 +7,5 @@ func main() {
 	if err != nil {
 		return
 	}
-	fmt.Print(status.Format())
+	fmt.Println(status.Format())
 }

@@ -3,8 +3,6 @@ package main
 import (
 	"fmt"
 	"strings"
-
-	"github.com/fatih/color"
 )
 
 // Status ...
@@ -35,31 +33,31 @@ func (s Status) Format() string {
 
 	// branch
 	if s.detached {
-		ret += color.CyanString("(" + s.branch + ")")
+		ret += "(" + s.branch + ")"
 	} else {
-		ret += color.CyanString(s.branch)
+		ret += s.branch
 	}
 	if s.hasremote {
 		if s.ahead > 0 && s.behind > 0 {
-			ret += color.YellowString(" ↑%d ↓%d", s.ahead, s.behind)
+			ret += fmt.Sprintf(" A%d B%d", s.ahead, s.behind)
 		} else if s.ahead > 0 {
-			ret += color.GreenString(" ↑%d", s.ahead)
+			ret += fmt.Sprintf(" A%d", s.ahead)
 		} else if s.behind > 0 {
-			ret += color.RedString(" ↓%d", s.behind)
+			ret += fmt.Sprintf(" B%d", s.behind)
 		} else {
-			ret += color.CyanString(" ≡")
+			ret += ""
 		}
 	}
 
 	if s.staged > 0 || s.changed > 0 || s.conflicts > 0 || s.untracked > 0 {
-		ret += color.RedString(" +%d", s.staged)
-		ret += color.RedString(" ~%d", s.changed)
-		ret += color.RedString(" ?%d", s.untracked)
-		ret += color.RedString(" !%d", s.conflicts)
+		ret += fmt.Sprintf(" +%d", s.staged)
+		ret += fmt.Sprintf(" ~%d", s.changed)
+		ret += fmt.Sprintf(" ?%d", s.untracked)
+		ret += fmt.Sprintf(" !%d", s.conflicts)
 	}
 
 	if s.stashs > 0 {
-		ret += color.GreenString(" | s%d", s.stashs)
+		ret += fmt.Sprintf(" | s%d", s.stashs)
 	}
 
 	ret += "]"

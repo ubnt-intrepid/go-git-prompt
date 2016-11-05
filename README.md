@@ -1,20 +1,32 @@
-# git-prompt-go
+# go-git-prompt
 Informative and fast Git prompt for any shell (Bash, Zsh, and PowerShell).
 
 This project is inspired from oliviervedier's [zsh-git-prompt](https://github.com/olivierverdier/zsh-git-prompt).
 
 # Usage (development)
 
-for Zsh user:
-```zsh
-PROMPT='%~ $(git-prompt-go) >'
+Bash:
+```
+PS1='\w $(go-git-prompt) % '
 ```
 
-for PowerShell user:
+Zsh:
+```
+PROMPT='%~ $(go-git-prompt) %% '
+```
+
+Fish:
+```fish
+function fish_prompt
+   echo (go-git-prompt)" % "
+end
+```
+
+and PowerShell:
 ```ps1
 function prompt {
   write-host "$(pwd) " -nonewline
-  write-host "$(git-prompt-go)" -nonewline
+  write-host (go-git-prompt) -nonewline
   return "`n> "
 }
 ```
