@@ -1,9 +1,13 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/ubnt-intrepid/go-git-prompt/src"
+)
 
 func main() {
-	status, err := GetCurrentStatus()
+	status, err := prompt.GetCurrentStatus()
 	if err != nil {
 		return
 	}

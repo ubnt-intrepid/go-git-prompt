@@ -1,0 +1,11 @@
+language: go
+
+go:
+  - 1.7
+  - master
+
+install:
+  - go get github.com/mgutz/ansi
+
+script:
+  - go test ./src
