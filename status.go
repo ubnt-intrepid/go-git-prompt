@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"strings"
+
+	"github.com/mgutz/ansi"
 )
 
 // Status ...
@@ -29,38 +31,38 @@ func (s Status) String() string {
 
 // Format ...
 func (s Status) Format() string {
-	ret := "["
+	ret := ansi.Color("[", "yellow")
 
 	// branch
 	if s.detached {
-		ret += "(" + s.branch + ")"
+		ret += ansi.Color("("+s.branch+")", "cyan")
 	} else {
-		ret += s.branch
+		ret += ansi.Color(s.branch, "cyan")
 	}
 	if s.hasremote {
 		if s.ahead > 0 && s.behind > 0 {
-			ret += fmt.Sprintf(" A%d B%d", s.ahead, s.behind)
+			ret += ansi.Color(fmt.Sprintf(" A%d B%d", s.ahead, s.behind), "yellow")
 		} else if s.ahead > 0 {
-			ret += fmt.Sprintf(" A%d", s.ahead)
+			ret += ansi.Color(fmt.Sprintf(" A%d", s.ahead), "green")
 		} else if s.behind > 0 {
-			ret += fmt.Sprintf(" B%d", s.behind)
+			ret += ansi.Color(fmt.Sprintf(" B%d", s.behind), "red")
 		} else {
-			ret += ""
+			//ret += ansi.Color(" ≡", "cyan")
 		}
 	}
 
 	if s.staged > 0 || s.changed > 0 || s.conflicts > 0 || s.untracked > 0 {
-		ret += fmt.Sprintf(" +%d", s.staged)
-		ret += fmt.Sprintf(" ~%d", s.changed)
-		ret += fmt.Sprintf(" ?%d", s.untracked)
-		ret += fmt.Sprintf(" !%d", s.conflicts)
+		ret += ansi.Color(fmt.Sprintf(" +%d", s.staged), "red")
+		ret += ansi.Color(fmt.Sprintf(" ~%d", s.changed), "red")
+		ret += ansi.Color(fmt.Sprintf(" ?%d", s.untracked), "red")
+		ret += ansi.Color(fmt.Sprintf(" !%d", s.conflicts), "red")
 	}
 
 	if s.stashs > 0 {
-		ret += fmt.Sprintf(" | s%d", s.stashs)
+		ret += ansi.Color(fmt.Sprintf(" | s%d", s.stashs), "green")
 	}
 
-	ret += "]"
+	ret += ansi.Color("]", "yellow")
 
 	return ret
 }
