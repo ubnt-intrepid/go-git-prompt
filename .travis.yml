@@ -1,10 +1,6 @@
 language: go
 sudo: false
 
-go:
-  - 1.7
-  - master
-
 install:
   - go get -v github.com/axw/gocov/gocov
   - go get -v github.com/mattn/goveralls
@@ -13,8 +9,21 @@ install:
 
 script:
   - go test -v ./src
-  - $HOME/gopath/bin/goveralls -repotoken $COVERALLS_TOKEN
+  - "$HOME/gopath/bin/goveralls -repotoken $COVERALLS_TOKEN"
 
 env:
   global:
-    secure: "J+3UoCULV3IjzCUnVHDTq4mreFgV2XbZ1z29QLwOdQfJdAKDv+vKszs7DYz+gfAszQB19kFp3hlEbUAwmL1IzjAbb2wzo3NqG7+Qa7M/yNSLKPBmFX7qFhqJCoa+Rj1G7H8+iDsoGGPBH2k2hL59C1qiTkLzR5+3esTcffBmlcBaqBU/BlF4vNJzR2pEoN0SPQH3B1L1RUwELMB7cjO01/gc8oYkZNhEMO3hsnXGsMw3SxvXE7vIcNKCBnFy0en8/iVg9+JkZS8ErI2//7HDw8Sgn2pBTU9Jr0rUQTvhCVkxbPfJQ8QvYHn8Oy1ZEKGmm8GJ6I7DyRH0hiPwn8KYYjYCtyTFfEOkiHg45OQ1IEmttGS6YkBsO4XQCKwUWWhTDHCYfJGtMgmeukrxB88qCRtZWAh7lF2ECO5g3GSsiJgrrxU1rS5y0TjiR2Pts1oMtg46nHYaaCpki0Ql7xeBPCmc72QcTeli3AA8D/HLYyYAdCuxUsLiICofUBtcQUQYCB+heagUJ0ZPBO2G0DcAxe4wxi/vH1x2sWRjoz3s8y4I3hlZ+MlkMitOLj5BztxEoogpxa35K/+liVUM4S9RtOcHta7xltYfll51LzygXw9gt91bxembUy0+pmDWRq6+ih7n+n1fttOgISmx82/hmC4Qis/h1wAbSAUzkGzsYLw="
+    secure: J+3UoCULV3IjzCUnVHDTq4mreFgV2XbZ1z29QLwOdQfJdAKDv+vKszs7DYz+gfAszQB19kFp3hlEbUAwmL1IzjAbb2wzo3NqG7+Qa7M/yNSLKPBmFX7qFhqJCoa+Rj1G7H8+iDsoGGPBH2k2hL59C1qiTkLzR5+3esTcffBmlcBaqBU/BlF4vNJzR2pEoN0SPQH3B1L1RUwELMB7cjO01/gc8oYkZNhEMO3hsnXGsMw3SxvXE7vIcNKCBnFy0en8/iVg9+JkZS8ErI2//7HDw8Sgn2pBTU9Jr0rUQTvhCVkxbPfJQ8QvYHn8Oy1ZEKGmm8GJ6I7DyRH0hiPwn8KYYjYCtyTFfEOkiHg45OQ1IEmttGS6YkBsO4XQCKwUWWhTDHCYfJGtMgmeukrxB88qCRtZWAh7lF2ECO5g3GSsiJgrrxU1rS5y0TjiR2Pts1oMtg46nHYaaCpki0Ql7xeBPCmc72QcTeli3AA8D/HLYyYAdCuxUsLiICofUBtcQUQYCB+heagUJ0ZPBO2G0DcAxe4wxi/vH1x2sWRjoz3s8y4I3hlZ+MlkMitOLj5BztxEoogpxa35K/+liVUM4S9RtOcHta7xltYfll51LzygXw9gt91bxembUy0+pmDWRq6+ih7n+n1fttOgISmx82/hmC4Qis/h1wAbSAUzkGzsYLw=
+
+deploy:
+  provider: releases
+  api_key:
+    secure: xNMv+Th+cXyD/1I4TFJeGyTKJIeZ7DQbQFDX2jWVN9y5kInjTzbj0uhiqgF1FgXbcf0kYA0e+eIdoGpyvu8wDFxDUZpQwP4NOypcYCayLo5INaVz34t4iXCqfpklzlOjO4oTUPGcD3Y8VK+iVIwL2XC4MdYC1uloiMu655WNao1EVXdCim5CBSj897reimG7u+3Gwvz1JIQARTHNp2RcYHGIjx8hj6ynY5hfDsqyvMxLptG//KBnG6gkxA4nR95BjAI+nzBAMS5QrjxKzOBdLJiksf/PuRgwt4iEAsiZCHo9UHssuniPxPM7z5bbUNPH5gRKuCCkQ4ucvbBA7A2Sy/erTwtYTgY0wACKu8tHKajHEjr2C5mMYoyA64xGdzUkPD+imqjo7lEKFRo3O3OODNrppgPnmXCszkWg0d0jMVUxCHsZ+tMorifEiJDMWhy368ykYK7CvBJqUSdSF4mYbPgGXIa8ZFlIMEuZ6C6uXr0B5QVIKfGTjVEayFyAmTloiRNFY13rcVHbSB2qLxbzlTjpCGtH60LdSIGZX4421u9rSC8TUp24G8eAcfQi+uDRXYWVLdkh75byyo39Pm2I02LPBkDoXP+3S4x6mKPqY3OQvYEES4b4r/dSwICANquaKcpCmXqg9adz3izgmlXrM5JeSJnXKSQtE842NC+ivSw=
+  file: ''
+  file_glob: true
+  overwrite: true
+  skip_cleanup: true
+  on:
+    repo: ubnt-intrepid/go-git-prompt
+    all_branches: true
+    tags: true
