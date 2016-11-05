@@ -6,10 +6,12 @@ install:
   - go get -v github.com/mattn/goveralls
   - go get -v golang.org/x/tools/cmd/cover
   - go get -v github.com/mgutz/ansi
-
+  - go get -v github.com/mitchellh/gox
+  
 script:
   - go test -v ./src
-  - "$HOME/gopath/bin/goveralls -repotoken $COVERALLS_TOKEN"
+  - $HOME/gopath/bin/goveralls -repotoken "$COVERALLS_TOKEN"
+  - $HOME/gopath/bin/gox -os="linux darwin windows" -arch="386 amd64" -output "goxdist/{{.Dir}}-{{.OS}}_{{.Arch}}"
 
 env:
   global:
@@ -19,7 +21,7 @@ deploy:
   provider: releases
   api_key:
     secure: xNMv+Th+cXyD/1I4TFJeGyTKJIeZ7DQbQFDX2jWVN9y5kInjTzbj0uhiqgF1FgXbcf0kYA0e+eIdoGpyvu8wDFxDUZpQwP4NOypcYCayLo5INaVz34t4iXCqfpklzlOjO4oTUPGcD3Y8VK+iVIwL2XC4MdYC1uloiMu655WNao1EVXdCim5CBSj897reimG7u+3Gwvz1JIQARTHNp2RcYHGIjx8hj6ynY5hfDsqyvMxLptG//KBnG6gkxA4nR95BjAI+nzBAMS5QrjxKzOBdLJiksf/PuRgwt4iEAsiZCHo9UHssuniPxPM7z5bbUNPH5gRKuCCkQ4ucvbBA7A2Sy/erTwtYTgY0wACKu8tHKajHEjr2C5mMYoyA64xGdzUkPD+imqjo7lEKFRo3O3OODNrppgPnmXCszkWg0d0jMVUxCHsZ+tMorifEiJDMWhy368ykYK7CvBJqUSdSF4mYbPgGXIa8ZFlIMEuZ6C6uXr0B5QVIKfGTjVEayFyAmTloiRNFY13rcVHbSB2qLxbzlTjpCGtH60LdSIGZX4421u9rSC8TUp24G8eAcfQi+uDRXYWVLdkh75byyo39Pm2I02LPBkDoXP+3S4x6mKPqY3OQvYEES4b4r/dSwICANquaKcpCmXqg9adz3izgmlXrM5JeSJnXKSQtE842NC+ivSw=
-  file: ''
+  file: 'goxdist/*'
   file_glob: true
   overwrite: true
   skip_cleanup: true
