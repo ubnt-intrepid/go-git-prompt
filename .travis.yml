@@ -1,11 +1,20 @@
 language: go
+sudo: false
 
 go:
   - 1.7
   - master
 
 install:
-  - go get github.com/mgutz/ansi
+  - go get -v github.com/axw/gocov/gocov
+  - go get -v github.com/mattn/goveralls
+  - go get -v golang.org/x/tools/cmd/cover
+  - go get -v github.com/mgutz/ansi
 
 script:
-  - go test ./src
+  - go test -v ./src
+  - $HOME/gopath/bin/goveralls -repotoken $COVERALLS_TOKEN
+
+env:
+  global:
+    secure: "J+3UoCULV3IjzCUnVHDTq4mreFgV2XbZ1z29QLwOdQfJdAKDv+vKszs7DYz+gfAszQB19kFp3hlEbUAwmL1IzjAbb2wzo3NqG7+Qa7M/yNSLKPBmFX7qFhqJCoa+Rj1G7H8+iDsoGGPBH2k2hL59C1qiTkLzR5+3esTcffBmlcBaqBU/BlF4vNJzR2pEoN0SPQH3B1L1RUwELMB7cjO01/gc8oYkZNhEMO3hsnXGsMw3SxvXE7vIcNKCBnFy0en8/iVg9+JkZS8ErI2//7HDw8Sgn2pBTU9Jr0rUQTvhCVkxbPfJQ8QvYHn8Oy1ZEKGmm8GJ6I7DyRH0hiPwn8KYYjYCtyTFfEOkiHg45OQ1IEmttGS6YkBsO4XQCKwUWWhTDHCYfJGtMgmeukrxB88qCRtZWAh7lF2ECO5g3GSsiJgrrxU1rS5y0TjiR2Pts1oMtg46nHYaaCpki0Ql7xeBPCmc72QcTeli3AA8D/HLYyYAdCuxUsLiICofUBtcQUQYCB+heagUJ0ZPBO2G0DcAxe4wxi/vH1x2sWRjoz3s8y4I3hlZ+MlkMitOLj5BztxEoogpxa35K/+liVUM4S9RtOcHta7xltYfll51LzygXw9gt91bxembUy0+pmDWRq6+ih7n+n1fttOgISmx82/hmC4Qis/h1wAbSAUzkGzsYLw="

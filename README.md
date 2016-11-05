@@ -1,6 +1,7 @@
 # go-git-prompt
 
 [![Build Status](https://travis-ci.org/ubnt-intrepid/go-git-prompt.svg?branch=master)](https://travis-ci.org/ubnt-intrepid/go-git-prompt)
+[![Coverage Status](https://coveralls.io/repos/github/ubnt-intrepid/go-git-prompt/badge.svg?branch=master)](https://coveralls.io/github/ubnt-intrepid/go-git-prompt?branch=master)
 
 Informative and fast Git prompt for any shell (Bash, Zsh, and PowerShell).
 
