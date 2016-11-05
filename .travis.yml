@@ -11,7 +11,7 @@ install:
 script:
   - go test -v ./src
   - $HOME/gopath/bin/goveralls -repotoken "$COVERALLS_TOKEN"
-  - $HOME/gopath/bin/gox -os="linux darwin windows" -arch="386 amd64" -output "goxdist/{{.Dir}}-{{.OS}}_{{.Arch}}"
+  - if [ -n "$TRAVIS_TAG" ]; then $HOME/gopath/bin/gox -os="linux darwin windows" -arch="386 amd64" -output "goxdist/{{.Dir}}-{{.OS}}_{{.Arch}}"; fi
 
 env:
   global:
