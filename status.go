@@ -86,21 +86,39 @@ func getStashCount() (int, error) {
 
 // GetCurrentStatus ...
 func GetCurrentStatus() (Status, error) {
-	lines, err := GetLines("git", "status", "--porcelain", "--branch")
-	if err != nil {
+	var branch string
+	var detached, hasremote bool
+	var ahead, behind, staged, conflicts, changed, untracked int
+	var numStashes int
+
+	c1 := make(chan error, 1)
+	go func() {
+		lines, err := GetLines("git", "status", "--porcelain", "--branch")
+		if err != nil {
+			c1 <- err
+			return
+		}
+		branch, detached, hasremote, ahead, behind, err = ParseBranchLine(lines[0])
+		if err != nil {
+			c1 <- err
+			return
+		}
+		staged, conflicts, changed, untracked = CollectChanges(lines[1:len(lines)])
+		c1 <- nil
+	}()
+
+	c2 := make(chan error, 1)
+	go func() {
+		var err error
+		numStashes, err = getStashCount()
+		c2 <- err
+	}()
+
+	if err := <-c1; err != nil {
 		return newStatus(), err
 	}
-
-	numStashes, err := getStashCount()
-	if err != nil {
+	if err := <-c2; err != nil {
 		return newStatus(), err
 	}
-
-	branch, detached, hasremote, ahead, behind, err := ParseBranchLine(lines[0])
-	if err != nil {
-		return newStatus(), err
-	}
-	staged, conflicts, changed, untracked := CollectChanges(lines[1:len(lines)])
-
 	return Status{branch, detached, hasremote, ahead, behind, staged, conflicts, changed, untracked, numStashes}, nil
 }
