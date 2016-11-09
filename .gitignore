@@ -23,5 +23,5 @@ _testmain.go
 *.test
 *.prof
 
-git-prompt-go
+go-git-prompt
 goxdist/
