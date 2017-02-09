@@ -54,10 +54,10 @@ func (s Status) Format() string {
 	}
 
 	if s.staged > 0 || s.changed > 0 || s.conflicts > 0 || s.untracked > 0 {
-		ret += ansi.Color(fmt.Sprintf(" +%d", s.staged), "red")
-		ret += ansi.Color(fmt.Sprintf(" ~%d", s.changed), "red")
-		ret += ansi.Color(fmt.Sprintf(" ?%d", s.untracked), "red")
-		ret += ansi.Color(fmt.Sprintf(" !%d", s.conflicts), "red")
+		ret += fmt.Sprintf(" +%d", s.staged)
+		ret += fmt.Sprintf(" ~%d", s.changed)
+		ret += fmt.Sprintf(" ?%d", s.untracked)
+		ret += fmt.Sprintf(" !%d", s.conflicts)
 	}
 
 	if s.stashs > 0 {
