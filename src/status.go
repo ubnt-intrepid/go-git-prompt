@@ -49,7 +49,7 @@ func (s Status) Format() string {
 		} else if s.behind > 0 {
 			ret += ansi.Color(fmt.Sprintf(" B%d", s.behind), "red")
 		} else {
-			//ret += ansi.Color(" ≡", "cyan")
+			ret += ansi.Color(" =", "cyan")
 		}
 	}
 
