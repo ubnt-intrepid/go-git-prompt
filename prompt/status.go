@@ -7,7 +7,6 @@ import (
 	"strings"
 
 	"github.com/ubnt-intrepid/go-git-prompt/color"
-	// "github.com/fatih/color"
 )
 
 // Status ...
@@ -33,39 +32,39 @@ func (s Status) String() string {
 }
 
 // Format ...
-func (s Status) Format() string {
-	ret := color.YellowString("(")
+func (s Status) Format(color color.Colored) string {
+	ret := color.Yellow("(")
 
 	// branch
 	if s.detached {
-		ret += color.CyanString("(%s)", s.branch)
+		ret += color.Cyan("(%s)", s.branch)
 	} else {
-		ret += color.CyanString("%s", s.branch)
+		ret += color.Cyan("%s", s.branch)
 	}
 	if s.hasremote {
 		if s.ahead > 0 && s.behind > 0 {
-			ret += color.YellowString(" A%d B%d", s.ahead, s.behind)
+			ret += color.Yellow(" A%d B%d", s.ahead, s.behind)
 		} else if s.ahead > 0 {
-			ret += color.GreenString(" A%d", s.ahead)
+			ret += color.Green(" A%d", s.ahead)
 		} else if s.behind > 0 {
-			ret += color.RedString(" B%d", s.behind)
+			ret += color.Red(" B%d", s.behind)
 		} else {
-			ret += color.CyanString(" =")
+			ret += color.Cyan(" =")
 		}
 	}
 
 	if s.staged > 0 || s.changed > 0 || s.conflicts > 0 || s.untracked > 0 {
-		ret += color.BlueString(" +%d", s.staged)
-		ret += color.BlueString(" ~%d", s.changed)
-		ret += color.BlueString(" ?%d", s.untracked)
-		ret += color.BlueString(" !%d", s.conflicts)
+		ret += color.Blue(" +%d", s.staged)
+		ret += color.Blue(" ~%d", s.changed)
+		ret += color.Blue(" ?%d", s.untracked)
+		ret += color.Blue(" !%d", s.conflicts)
 	}
 
 	if s.stashs > 0 {
-		ret += color.GreenString(" | s%d", s.stashs)
+		ret += color.Green(" | s%d", s.stashs)
 	}
 
-	ret += color.YellowString(")")
+	ret += color.Yellow(")")
 
 	return ret
 }
