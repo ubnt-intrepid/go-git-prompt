@@ -3,8 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"os"
-	"strings"
 
 	"github.com/ubnt-intrepid/go-git-prompt/color"
 	"github.com/ubnt-intrepid/go-git-prompt/prompt"
@@ -20,8 +18,8 @@ func main() {
 	flag.Parse()
 
 	var colored color.Colored
-	if *fColored == "zsh" || strings.Contains(os.Getenv("SHELL"), "zsh") {
-		colored = color.NewZshColor()
+	if *fColored == "zsh" {
+		colored = color.NewZshColoredOutput()
 	} else {
 		colored = color.NewDefaultColoredOutput()
 	}
