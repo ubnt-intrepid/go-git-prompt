@@ -10,7 +10,7 @@ import (
 )
 
 // Status ...
-type Status struct {
+type GitStatus struct {
 	branch    string
 	detached  bool
 	hasremote bool
@@ -23,16 +23,12 @@ type Status struct {
 	stashs    int
 }
 
-func newStatus() Status {
-	return Status{"", false, false, 0, 0, 0, 0, 0, 0, 0}
-}
-
-func (s Status) String() string {
-	return fmt.Sprintf("%s %v %v %d %d %d %d %d %d %d", s.branch, s.detached, s.hasremote, s.ahead, s.behind, s.staged, s.conflicts, s.changed, s.untracked, s.stashs)
+func newGitStatus() GitStatus {
+	return GitStatus{"", false, false, 0, 0, 0, 0, 0, 0, 0}
 }
 
 // Format ...
-func (s Status) Format(color color.Colored) string {
+func (s *GitStatus) Prompt(color color.Colored) string {
 	ret := color.Yellow("(")
 
 	// branch
@@ -87,7 +83,7 @@ func getStashCount() (int, error) {
 }
 
 // GetCurrentStatus ...
-func GetCurrentStatus() (Status, error) {
+func GetCurrentStatus() (GitStatus, error) {
 	var branch string
 	var detached, hasremote bool
 	var ahead, behind, staged, conflicts, changed, untracked int
@@ -117,12 +113,12 @@ func GetCurrentStatus() (Status, error) {
 	}()
 
 	if err := <-c1; err != nil {
-		return newStatus(), err
+		return newGitStatus(), err
 	}
 	if err := <-c2; err != nil {
-		return newStatus(), err
+		return newGitStatus(), err
 	}
-	return Status{branch, detached, hasremote, ahead, behind, staged, conflicts, changed, untracked, numStashes}, nil
+	return GitStatus{branch, detached, hasremote, ahead, behind, staged, conflicts, changed, untracked, numStashes}, nil
 }
 
 func getTagOrHash() string {

@@ -5,8 +5,8 @@ import "fmt"
 /// Formatter ...
 type ZshColoredOutput struct{}
 
-func NewZshColoredOutput() ZshColoredOutput {
-	return ZshColoredOutput{}
+func NewZshColoredOutput() Colored {
+	return &ZshColoredOutput{}
 }
 
 /// Foreground ...

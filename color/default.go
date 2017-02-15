@@ -4,8 +4,8 @@ import "github.com/fatih/color"
 
 type DefaultColoredOutput struct{}
 
-func NewDefaultColoredOutput() DefaultColoredOutput {
-	return DefaultColoredOutput{}
+func NewDefaultColoredOutput() Colored {
+	return &DefaultColoredOutput{}
 }
 
 func (f DefaultColoredOutput) Cyan(format string, a ...interface{}) string {

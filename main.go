@@ -23,5 +23,5 @@ func main() {
 	} else {
 		colored = color.NewDefaultColoredOutput()
 	}
-	fmt.Print(status.Format(colored))
+	fmt.Print(status.Prompt(colored))
 }
